@@ -15,6 +15,9 @@
 		6132EF182BDFF13200BBE14D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6132EF172BDFF13200BBE14D /* PrivacyInfo.xcprivacy */; };
 		7699B88040F8A987B510C191 /* libPods-SuperApp-SuperAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-SuperApp-SuperAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		959A3AF12CDB272F00E60E5C /* ConnectNativeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 959A3AF02CDB272F00E60E5C /* ConnectNativeModule.m */; };
+		959A3AF92CDB4B0900E60E5C /* index.ios-1.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 959A3AF82CDB4B0900E60E5C /* index.ios-1.bundle */; };
+		959A3AFB2CDB4C3C00E60E5C /* index.ios-2.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 959A3AFA2CDB4C3C00E60E5C /* index.ios-2.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +48,10 @@
 		6132EF172BDFF13200BBE14D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = SuperApp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = SuperApp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-SuperApp-SuperAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuperApp-SuperAppTests.release.xcconfig"; path = "Target Support Files/Pods-SuperApp-SuperAppTests/Pods-SuperApp-SuperAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		959A3AF02CDB272F00E60E5C /* ConnectNativeModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConnectNativeModule.m; sourceTree = "<group>"; };
+		959A3AF32CDB27A400E60E5C /* ConnectNativeModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConnectNativeModule.h; sourceTree = "<group>"; };
+		959A3AF82CDB4B0900E60E5C /* index.ios-1.bundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = "index.ios-1.bundle"; sourceTree = "<group>"; };
+		959A3AFA2CDB4C3C00E60E5C /* index.ios-2.bundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = "index.ios-2.bundle"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -111,6 +118,8 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				959A3AFA2CDB4C3C00E60E5C /* index.ios-2.bundle */,
+				959A3AF82CDB4B0900E60E5C /* index.ios-1.bundle */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -118,6 +127,8 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				959A3AF32CDB27A400E60E5C /* ConnectNativeModule.h */,
+				959A3AF02CDB272F00E60E5C /* ConnectNativeModule.m */,
 				6132EF172BDFF13200BBE14D /* PrivacyInfo.xcprivacy */,
 				13B07FAE1A68108700A75B9A /* SuperApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -209,7 +220,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1600;
 					};
 				};
 			};
@@ -245,8 +256,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6132EF182BDFF13200BBE14D /* PrivacyInfo.xcprivacy in Resources */,
+				959A3AF92CDB4B0900E60E5C /* index.ios-1.bundle in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				959A3AFB2CDB4C3C00E60E5C /* index.ios-2.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -396,6 +409,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				959A3AF12CDB272F00E60E5C /* ConnectNativeModule.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
@@ -484,6 +498,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = SuperApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "SuperApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -510,6 +525,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = SuperApp;
+				SWIFT_OBJC_BRIDGING_HEADER = "SuperApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -578,7 +594,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"$(inherited)",
-					"-DRN_FABRIC_ENABLED",
+					" ",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -586,7 +602,6 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
-					"-DRN_FABRIC_ENABLED",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -653,7 +668,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
 					"$(inherited)",
-					"-DRN_FABRIC_ENABLED",
+					" ",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
@@ -661,7 +676,6 @@
 					"-DFOLLY_MOBILE=1",
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
-					"-DRN_FABRIC_ENABLED",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

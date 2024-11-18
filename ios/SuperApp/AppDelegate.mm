@@ -1,6 +1,7 @@
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
+#import <React/RCTLinkingManager.h> // Import using RCTLinkingManager for Open Lining API
 
 @implementation AppDelegate
 
@@ -13,6 +14,15 @@
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
+
+// Open Linking API
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
+}
+// CLose Linking API
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {

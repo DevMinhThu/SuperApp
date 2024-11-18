@@ -1,118 +1,183 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Text,
+  StyleSheet,
+  TextInput,
+  SafeAreaView,
+  TouchableOpacity,
+  NativeModules,
+  Platform,
+  Linking,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+const {ConnectNativeModule} = NativeModules;
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+const Stack = createNativeStackNavigator();
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+const HomeScreen = () => {
+  const [input, setInput] = useState('');
+
+  const LIST_APPS = [
+    {
+      appName: 'ChatApp', // Chú ý ăn theo appName của dự án
+      bundleId: `index.${Platform.OS}-1.bundle`,
+    },
+    {
+      appName: 'ShoppingApp',
+      bundleId: `index.${Platform.OS}-2.bundle`,
+    },
+  ];
+
+  const openMiniApp = (item: any, passData: any) => {
+    const {appName, bundleId} = item || {};
+    ConnectNativeModule?.openApp(
+      appName,
+      bundleId,
+      {...passData}, // Data pass to mini app
+      false,
+      () => {},
+    );
+  };
+
+  const goToNextApp = useCallback(
+    async (item: any) => {
+      openMiniApp(item, {text: input});
+
+      const result = await ConnectNativeModule?.getBundleNames();
+      return result;
+    },
+    [input],
   );
-}
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+  // ====== HANDLE DEEP-LINK ======
+  const handleDeepLink = (event: any) => {
+    const {url} = event;
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    if (url) {
+      const queryString = url.split('?')[1];
+      const queryParams = {} as any;
+      if (queryString) {
+        queryString.split('&').forEach((param: any) => {
+          const [key, value] = param.split('=');
+          queryParams[key] = decodeURIComponent(value);
+        });
+      }
+      const {userId, messageId} = queryParams;
+
+      if (url?.includes('chatapp')) {
+        console.log('Navigate to ChatApp');
+        openMiniApp(
+          {
+            appName: 'ChatApp',
+            bundleId: `index.${Platform.OS}-1.bundle`,
+          },
+          {userId, messageId},
+        );
+        return;
+      }
+      if (url?.includes('shoppingapp')) {
+        openMiniApp(
+          {
+            appName: 'ShoppingApp',
+            bundleId: `index.${Platform.OS}-2.bundle`,
+          },
+          {text: 'Data from DeepLink'},
+        );
+        return;
+      }
+    }
+  };
+
+  useEffect(() => {
+    Linking.getInitialURL()
+      .then(url => handleDeepLink({url}))
+      .catch(console.error);
+
+    Linking.addEventListener('url', handleDeepLink);
+    return () => {
+      Linking.removeAllListeners('url');
+    };
+  }, []);
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <View>
+          <Text style={styles.title}>Value send to Mini App</Text>
+          <TextInput
+            value={input}
+            style={styles.input}
+            onChangeText={text => setInput(text)}
+            placeholder="Value to send to mini app"
+          />
+        </View>
+        {LIST_APPS.map(app => (
+          <TouchableOpacity
+            key={app?.bundleId}
+            style={styles.buttonApp}
+            onPress={() => goToNextApp(app)}>
+            <Text style={styles.appName}>{app?.appName}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default function App() {
+  const linking = {
+    prefixes: ['supperapp://path'],
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer linking={linking}>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+        initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
   },
-  sectionTitle: {
+  content: {
+    flex: 1,
+    gap: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 25,
+  },
+  title: {
+    marginBottom: 10,
     fontSize: 24,
-    fontWeight: '600',
+    color: 'black',
+    fontWeight: 'bold',
   },
-  sectionDescription: {
-    marginTop: 8,
+  appName: {
     fontSize: 18,
-    fontWeight: '400',
+    color: '#fff',
   },
-  highlight: {
-    fontWeight: '700',
+  buttonApp: {
+    width: 150,
+    padding: 16,
+    borderRadius: 12,
+    alignItems: 'center',
+    backgroundColor: 'black',
+  },
+  input: {
+    padding: 12,
+    borderWidth: 1,
+    borderRadius: 8,
+    color: 'black',
+    borderColor: 'black',
   },
 });
-
-export default App;
